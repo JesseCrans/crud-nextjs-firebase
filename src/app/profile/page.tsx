@@ -48,7 +48,7 @@ const page = () => {
   return (
     <PageLayout>
       {
-        userInfo ? (
+        user.uid ? (
           <div className='flex flex-col items-start justify-start'>
             <h1>Profile</h1>
             <label className='flex justify-between gap-2 items-center'>

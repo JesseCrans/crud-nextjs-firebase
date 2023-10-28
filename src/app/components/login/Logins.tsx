@@ -2,7 +2,7 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle, faGithub, faFacebook } from '@fortawesome/free-brands-svg-icons';
 import Image from 'next/image';
-import { useUser } from '../UserContext';
+import { useUser } from '../../UserContext';
 
 const Logins = () => {
   const { user, googleLogin, githubLogin } = useUser();

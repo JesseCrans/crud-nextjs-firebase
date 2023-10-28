@@ -2,14 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useUser } from '../UserContext';
-import Logins from '../components/Logins';
+import Logins from '../components/login/Logins';
 import PageLayout from '../Layouts/PageLayout';
 
 const page = () => {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
-  const { user, emailPasswordLogin, loading } = useUser();
+  const { user, emailPasswordLogin, loading, userInfo } = useUser();
 
   const login = async (e: any) => {
     e.preventDefault();
@@ -20,7 +20,7 @@ const page = () => {
     <PageLayout>
       <div className='flex justify-center'>
         {
-          !user.email ? (
+          !userInfo ? (
             <form className='flex flex-col gap-3 border-2 p-4 rounded-md'>
               <label className='flex justify-between gap-2'>
                 Email

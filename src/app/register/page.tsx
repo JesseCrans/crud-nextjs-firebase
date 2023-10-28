@@ -2,7 +2,7 @@
 import React, { MouseEventHandler, useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
 import { useUser } from '../UserContext';
-import Logins from '../components/Logins';
+import Logins from '../components/login/Logins';
 import PageLayout from '../Layouts/PageLayout';
 
 interface User {
@@ -13,7 +13,7 @@ const page = () => {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
 
-  const { user, emailPasswordRegister, loading } = useUser();
+  const { user, emailPasswordRegister, loading, userInfo } = useUser();
 
   const register = async (e: any) => {
     e.preventDefault();
@@ -22,10 +22,9 @@ const page = () => {
 
   return (
     <PageLayout>
-
       <div className='flex justify-center'>
         {
-          !user.email ? (
+          !userInfo ? (
             <form className='flex flex-col gap-3 border-2 p-4 rounded-md'>
               <label className='flex justify-between gap-2'>
                 Email

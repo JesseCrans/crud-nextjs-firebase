@@ -9,13 +9,12 @@ import {
   GoogleAuthProvider,
   GithubAuthProvider,
   signInWithPopup,
-  getAdditionalUserInfo
+  getAdditionalUserInfo,
 } from 'firebase/auth';
 import { ref, set, onValue } from "firebase/database";
-import { get } from 'http';
 
 interface defaultValue {
-  user: User,
+  user: any,
   userInfo: UserInfo,
   emailPasswordRegister: (email: string, password: string) => void,
   emailPasswordLogin: (email: string, password: string) => void,
@@ -23,10 +22,6 @@ interface defaultValue {
   googleLogin: () => void,
   githubLogin: () => void,
   loading: boolean
-}
-
-interface User {
-  uid: string,
 }
 
 interface UserInfo {
@@ -46,7 +41,7 @@ export const UserProvider = ({
 }: {
   children: React.ReactNode
 }) => {
-  const [user, setUser] = useState({} as User);
+  const [user, setUser] = useState({} as any);
   const [userInfo, setUserInfo] = useState({} as UserInfo); // [username, email, createdOn, lastLogin, photoURL
   const [loading, setLoading] = useState(true);
 
@@ -59,6 +54,7 @@ export const UserProvider = ({
       lastLogin: user.metadata.lastSignInTime,
       photoURL: user.photoURL ? user.photoURL : "",
     });
+    console.log('added user to database')
   }
 
   const emailPasswordRegister = async (email: string, password: string) => {
@@ -82,7 +78,10 @@ export const UserProvider = ({
     try {
       const provider = new GoogleAuthProvider();
       const user = await signInWithPopup(auth, provider);
-      addUserToDatabase(user.user);
+      if (getAdditionalUserInfo(user)?.isNewUser) {
+        console.log('new user');
+        addUserToDatabase(user.user);
+      }
     } catch (error: any) {
       console.log(error.message)
     }
@@ -92,10 +91,10 @@ export const UserProvider = ({
     try {
       const provider = new GithubAuthProvider();
       const result = await signInWithPopup(auth, provider);
-      const credential = GithubAuthProvider.credentialFromResult(result);
-      const token = credential?.accessToken;
       const user = result.user;
-      addUserToDatabase(user);
+      if (getAdditionalUserInfo(result)?.isNewUser) {
+        addUserToDatabase(user);
+      }
     } catch (error: any) {
       console.log(error.message)
     }
@@ -114,12 +113,12 @@ export const UserProvider = ({
       if (authUser) {
         setUser(authUser);
       } else {
-        setUser({} as User);
+        setUser({} as any);
       }
     });
 
     return () => unsubscribe();
-  }, [])
+  }, []);
 
   useEffect(() => {
     const checkAuthentication = async () => {
