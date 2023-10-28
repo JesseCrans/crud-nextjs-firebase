@@ -2,24 +2,33 @@
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { useUser } from '../UserContext';
+import { onValue } from 'firebase/database';
 
 const Navbar = () => {
-  const { user, logout, loading } = useUser();
+  const { user, logout, loading, userInfo } = useUser();
 
   return (
     <nav
       className='p-4 border-b-2'
     >
       <ul
-        className='flex justify-between items-center'
+        className='flex flex-col items-center gap-2 justify-start sm:flex-row sm:justify-between sm:items-center'
       >
-        <li>
-          <Link href='/'>Home</Link>
-        </li>
+        <div className='flex sm:justify-between sm:gap-4 sm:flex-row sm:p-0 sm:border-none flex-col items-center gap-2 border-b-2 pb-2'>
+          <li>
+            <Link href='/'>Home</Link>
+          </li>
+          <li>
+            <Link href='/profile'>Profile</Link>
+          </li>
+          <li>
+            <Link href='/about'>About</Link>
+          </li>
+        </div>
         {
           loading ? (
             <p>...</p>
-          ) : !user.email ? (
+          ) : !userInfo ? (
             <div className='flex justify-between gap-4'>
               <li className=''>
                 <Link href='/login'>Log in</Link>
@@ -29,15 +38,15 @@ const Navbar = () => {
               </li>
             </div>
           ) : (
-            <div className='flex justify-between gap-4'>
+            <div className='flex sm:flex-row sm:justify-start sm:gap-4 flex-col items-center gap-2'>
               {
-                user.displayName ? (
+                userInfo.username ? (
                   <li>
-                    Logged in as {user.displayName}
+                    Logged in as {userInfo.username}
                   </li>
-                ) : user.email ? (
+                ) : userInfo.email ? (
                   <li>
-                    Logged in as {user.email}
+                    Logged in with {userInfo.email.length > 20 ? userInfo.email.slice(0, 20) + '...' : userInfo.email}
                   </li>
                 ) : (
                   <li>

@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from 'react';
-import { auth } from './firebase';
+import { auth, db } from './firebase';
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -11,9 +11,12 @@ import {
   signInWithPopup,
   getAdditionalUserInfo
 } from 'firebase/auth';
+import { ref, set, onValue } from "firebase/database";
+import { get } from 'http';
 
 interface defaultValue {
-  user: any,
+  user: User,
+  userInfo: UserInfo,
   emailPasswordRegister: (email: string, password: string) => void,
   emailPasswordLogin: (email: string, password: string) => void,
   logout: () => void,
@@ -22,17 +25,46 @@ interface defaultValue {
   loading: boolean
 }
 
+interface User {
+  uid: string,
+}
+
+interface UserInfo {
+  email: string,
+  username: string,
+  createdOn: string,
+  lastLogin: string,
+  photoURL: string
+}
+
 const UserContext = createContext({} as defaultValue);
 
 export const useUser = () => useContext(UserContext);
 
-export const UserProvider = ({ children }: any) => {
-  const [user, setUser] = useState({});
+export const UserProvider = ({
+  children
+}: {
+  children: React.ReactNode
+}) => {
+  const [user, setUser] = useState({} as User);
+  const [userInfo, setUserInfo] = useState({} as UserInfo); // [username, email, createdOn, lastLogin, photoURL
   const [loading, setLoading] = useState(true);
+
+  const addUserToDatabase = async (user: any) => {
+    const userRef = ref(db, 'users/' + user.uid);
+    set(userRef, {
+      username: user.displayName ? user.displayName : "",
+      email: user.email ? user.email : "",
+      createdOn: user.metadata.creationTime,
+      lastLogin: user.metadata.lastSignInTime,
+      photoURL: user.photoURL ? user.photoURL : "",
+    });
+  }
 
   const emailPasswordRegister = async (email: string, password: string) => {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
+      addUserToDatabase(user.user);
     } catch (error: any) {
       console.log(error.message)
     }
@@ -50,6 +82,7 @@ export const UserProvider = ({ children }: any) => {
     try {
       const provider = new GoogleAuthProvider();
       const user = await signInWithPopup(auth, provider);
+      addUserToDatabase(user.user);
     } catch (error: any) {
       console.log(error.message)
     }
@@ -62,6 +95,7 @@ export const UserProvider = ({ children }: any) => {
       const credential = GithubAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
       const user = result.user;
+      addUserToDatabase(user);
     } catch (error: any) {
       console.log(error.message)
     }
@@ -80,7 +114,7 @@ export const UserProvider = ({ children }: any) => {
       if (authUser) {
         setUser(authUser);
       } else {
-        setUser({});
+        setUser({} as User);
       }
     });
 
@@ -90,17 +124,27 @@ export const UserProvider = ({ children }: any) => {
   useEffect(() => {
     const checkAuthentication = async () => {
       await new Promise((resolve) => {
-        setTimeout(resolve, 200)
+        setTimeout(resolve, 300)
       })
       setLoading(false);
     };
     checkAuthentication();
+
+    const getUserFromDatabase = async () => {
+      const userRef = ref(db, 'users/' + user.uid);
+      onValue(userRef, (snapshot) => {
+        const data = snapshot.val();
+        setUserInfo(data);
+      });
+    }
+    getUserFromDatabase();
   }, [user]);
 
   return (
     <UserContext.Provider
       value={{
         user,
+        userInfo,
         loading,
         emailPasswordLogin,
         emailPasswordRegister,

@@ -25,7 +25,7 @@ const Logins = () => {
           title='Sign in with Google'
           onClick={googleSignin}
         >
-          <Image src='web_neutral_rd_na.svg' alt='Google' width={60} height={60} />
+          <Image src='/assets/web_neutral_rd_na.svg' alt='Google' width={60} height={60} />
         </button>
         <button
           className='text-6xl'
