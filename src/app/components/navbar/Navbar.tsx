@@ -1,7 +1,7 @@
 "use client";
 import Link from 'next/link';
 import React, { useEffect } from 'react';
-import { useUser } from '../../UserContext';
+import { useUser } from '../../contexts/UserContext';
 import { onValue } from 'firebase/database';
 
 const Navbar = () => {

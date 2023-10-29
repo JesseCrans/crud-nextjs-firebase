@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { onValue, ref, set } from 'firebase/database';
 import { db } from '../firebase';
-import { useUser } from '../UserContext';
+import { useUser } from '../contexts/UserContext';
 import PageLayout from '../Layouts/PageLayout';
 
 interface User {

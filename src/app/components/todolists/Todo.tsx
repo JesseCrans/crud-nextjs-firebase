@@ -55,7 +55,7 @@ const Todo = ({
             <div>
               <input
                 type="checkbox"
-                className="mx-2"
+                className="mx-4"
                 checked={todo.completed}
                 onChange={(e) => changeTodoStatus(e, todoId)}
               />

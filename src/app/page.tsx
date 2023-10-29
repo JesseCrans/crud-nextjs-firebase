@@ -1,12 +1,13 @@
 "use client";
 import PageLayout from "./Layouts/PageLayout";
-import { useUser } from "./UserContext";
+import { useUser } from "./contexts/UserContext";
 import TodoListPreview from "./components/todolists/TodoListPreview";
 import TodoListTitle from "./components/todolists/TodoListTitle";
 import Todo from "./components/todolists/Todo";
 import { db } from "./firebase";
 import { ref, push, onValue, set } from "firebase/database";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export interface TodoList {
   name: string,
@@ -84,7 +85,7 @@ export default function Home() {
         name: newTodo.trim(),
         completed: false
       };
-      if (!todo) {
+      if (todo.name == '') {
         alert('Please enter a todo.');
         return
       }
@@ -94,6 +95,8 @@ export default function Home() {
       setNewTodo('');
       setAddingNewTodo(false);
     } else {
+      setEditingTodo('');
+      setNewTodo('');
       setAddingNewTodo(true);
     }
   }
@@ -139,7 +142,7 @@ export default function Home() {
 
   // edit the name of a todo in the current todo list
   const editTodo = async (todoId: string) => {
-    if (editingTodo) {
+    if (editingTodo && editingTodo == todoId) {
       if (newTodo.trim() == '') {
         setEditingTodo('');
         return;
@@ -149,6 +152,8 @@ export default function Home() {
       setNewTodo('');
       setEditingTodo('');
     } else {
+      setNewTodo('');
+      setAddingNewTodo(false);
       setEditingTodo(todoId);
     }
   }
@@ -157,7 +162,7 @@ export default function Home() {
     <PageLayout>
       {
         !user.uid ? ( // if user is not logged in
-          <p>Please login to see your ToDo lists.</p>
+          <Link href='/login'>Please login to see your ToDo lists.</Link>
         ) : viewingListId == '' ? ( // if user is logged in and not viewing a todo list
           <>
             <ul className="flex flex-wrap gap-4 my-4">
@@ -234,7 +239,7 @@ export default function Home() {
                 addingNewTodo && (
                   <input
                     type="text"
-                    className="border-2 rounded-md p-2 mr-2"
+                    className="rounded-md p-2 mr-2"
                     value={newTodo}
                     onChange={(e) => setNewTodo(e.target.value)}
                   />

@@ -27,6 +27,7 @@ const TodoListPreview = ({
               todoListTodosArray.slice(0, 5).map(([todoId, todo]) => (
                 <li
                   key={todoId}
+                  className='break-all'
                 >
                   {todo.name}
                 </li>

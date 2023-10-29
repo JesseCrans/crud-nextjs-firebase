@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from 'react';
-import { auth, db } from './firebase';
+import { auth, db } from '../firebase';
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -21,7 +21,8 @@ interface defaultValue {
   logout: () => void,
   googleLogin: () => void,
   githubLogin: () => void,
-  loading: boolean
+  loading: boolean,
+  error: string | undefined
 }
 
 interface UserInfo {
@@ -44,6 +45,7 @@ export const UserProvider = ({
   const [user, setUser] = useState({} as any);
   const [userInfo, setUserInfo] = useState({} as UserInfo); // [username, email, createdOn, lastLogin, photoURL
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('' as string | undefined);
 
   const addUserToDatabase = async (user: any) => {
     const userRef = ref(db, 'users/' + user.uid);
@@ -62,7 +64,7 @@ export const UserProvider = ({
       const user = await createUserWithEmailAndPassword(auth, email, password);
       addUserToDatabase(user.user);
     } catch (error: any) {
-      console.log(error.message)
+      setError(error.message);
     }
   }
 
@@ -70,7 +72,7 @@ export const UserProvider = ({
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
     } catch (error: any) {
-      console.log(error.message)
+      setError(error.message);
     }
   }
 
@@ -83,7 +85,7 @@ export const UserProvider = ({
         addUserToDatabase(user.user);
       }
     } catch (error: any) {
-      console.log(error.message)
+      setError(error.message);
     }
   }
 
@@ -96,7 +98,7 @@ export const UserProvider = ({
         addUserToDatabase(user);
       }
     } catch (error: any) {
-      console.log(error.message)
+      setError(error.message);
     }
   }
 
@@ -150,6 +152,7 @@ export const UserProvider = ({
         logout,
         googleLogin,
         githubLogin,
+        error
       }}
     >
       {children}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useUser } from '../UserContext'
+import { useUser } from '../contexts/UserContext'
 
 const PageLayout = ({
   children
