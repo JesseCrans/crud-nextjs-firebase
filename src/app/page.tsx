@@ -220,16 +220,18 @@ export default function Home() {
                     <p className="text-left">No todos</p>
                   ) : (
                     viewingListTodos.map(([todoId, todo]) => (
-                      <Todo
-                        todoId={todoId}
-                        todo={todo}
-                        editingTodo={editingTodo}
-                        newTodo={newTodo}
-                        setNewTodo={setNewTodo}
-                        changeTodoStatus={changeTodoStatus}
-                        editTodo={editTodo}
-                        deleteTodo={deleteTodo}
-                      />
+                      <div key={todoId}>
+                        <Todo
+                          todoId={todoId}
+                          todo={todo}
+                          editingTodo={editingTodo}
+                          newTodo={newTodo}
+                          setNewTodo={setNewTodo}
+                          changeTodoStatus={changeTodoStatus}
+                          editTodo={editTodo}
+                          deleteTodo={deleteTodo}
+                        />
+                      </div>
                     ))
                   )
                 }

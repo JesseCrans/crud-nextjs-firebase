@@ -51,7 +51,7 @@ const Page = () => {
               >
                 Log in
               </button>
-              <Link href='/register'>or <span className='underline text-blue-500'>register</span>, if you don't have an account yet.</Link>
+              <Link href='/register'>or <span className='underline text-blue-500'>register</span>, if you don&apos;t have an account yet.</Link>
               <hr />
               <Logins />
             </form>
