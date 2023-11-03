@@ -20,7 +20,7 @@ const page = () => {
     <PageLayout>
       <div className='flex justify-center'>
         {
-          !userInfo ? (
+          !user.uid ? (
             <form className='flex flex-col gap-3 border-2 p-4 rounded-md'>
               <p
                 className='text-red-500'

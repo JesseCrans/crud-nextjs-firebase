@@ -28,7 +28,7 @@ const Navbar = () => {
         {
           loading ? (
             <p>...</p>
-          ) : !userInfo ? (
+          ) : !user.uid ? (
             <div className='flex justify-between gap-4'>
               <li className=''>
                 <Link href='/login'>Log in</Link>

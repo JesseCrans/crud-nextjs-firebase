@@ -44,7 +44,6 @@ export default function Home() {
       for (let id in data) {
         todoLists.push({ id, ...data[id] });
       }
-      console.log("todoLists", todoLists);
       setTodoLists(todoLists);
     });
   }, [user]);
