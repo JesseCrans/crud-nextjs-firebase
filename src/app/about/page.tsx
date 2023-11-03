@@ -2,11 +2,11 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 
-const page = () => {
+const Page = () => {
   return (
     <main className='px-16 py-4 flex flex-col justify-start items-center'>
       <h1 className='m-4'>About</h1>
-      <p className='text-center'>
+      <div className='text-center'>
         This ToDo app was made as a practice project by <a href='https://github.com/JesseCrans' className='text-blue-500 hover:text-blue-700 underline' >me <FontAwesomeIcon icon={faGithub} className='h-4 inline' /></a> for learning:
         <ul
           className='list-disc list-inside'
@@ -32,9 +32,9 @@ const page = () => {
         Now the returns of the components can be a bit messy and long. I would try to document everything from the start including tests.
         I would also try to make more use of the typescript types and try to make them more specific and realy define everything.
         And more specifically for authentication a way of verifying the user's email address and changing the password.
-      </p>
+      </div>
     </main>
   )
 }
 
-export default page
+export default Page

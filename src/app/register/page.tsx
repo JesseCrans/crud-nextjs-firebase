@@ -9,7 +9,7 @@ interface User {
   email: string
 }
 
-const page = () => {
+const Page = () => {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerPasswordConfirm, setRegisterPasswordConfirm] = useState("");
@@ -94,4 +94,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

@@ -13,7 +13,7 @@ interface User {
   photoURL: string
 }
 
-const page = () => {
+const Page = () => {
   const [username, setUsername] = useState("");
   const [created, setCreated] = useState("");
   // const [userInfo, setUserInfo] = useState({} as User);
@@ -85,4 +85,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

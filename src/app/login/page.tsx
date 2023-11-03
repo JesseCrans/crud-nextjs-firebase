@@ -5,7 +5,7 @@ import { useUser } from '../contexts/UserContext';
 import Logins from '../components/login/Logins';
 import PageLayout from '../Layouts/PageLayout';
 
-const page = () => {
+const Page = () => {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
@@ -76,4 +76,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
